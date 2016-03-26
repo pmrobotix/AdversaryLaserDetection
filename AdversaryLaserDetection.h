@@ -15,8 +15,11 @@
 
 //add your function definitions for the project AdversaryLaserDetection here
 
+void interruptRotationTick();
+void interruptLaser();
 
-
+void writeToStableBuffer();
+void logStableBuffer();
 
 //Do not add code below this line
 #endif /* _AdversaryLaserDetection_H_ */
