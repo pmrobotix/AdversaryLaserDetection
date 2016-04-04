@@ -2,6 +2,7 @@
 #include "AdversaryLaserDetection.h"
 
 #include <AFMotor.h>
+#include <Wire.h>
 
 AF_DCMotor motor(4);
 
@@ -116,6 +117,10 @@ volatile boolean stableBufReadInProgress = false;
 volatile ACQ_MODE acqMode = ACQ_MODE_STD; // init, do not change
 
 void setup() {
+
+	// standard I2C
+	Wire.begin(); // join i2c bus (address optional for master)
+
 	Serial.begin(9600);           // set up Serial library at 9600 bps
 	Serial.println("AdversaryLaserDetection console!");
 
@@ -207,6 +212,14 @@ void readFromStableBuffer(LaserDetectionBuffer &dest) {
 	stableBufReadInProgress = false;
 }
 
+
+void sendToI2CSlave(int beaconCount) {
+	  Wire.beginTransmission(8); // transmit to device #8
+	  Wire.write(beaconCount);              // sends one byte
+	  Wire.endTransmission();    // stop transmitting
+}
+
+
 void logStableBuffer() {
 	LaserDetectionBuffer buf;
 	readFromStableBuffer(buf);
@@ -274,5 +287,9 @@ void logStableBuffer() {
 		Serial.print(beta);
 
 		Serial.println();
+
+
+		//I2C test
+		sendToI2CSlave(buf.detectedBeaconCount);
 	}
 }
