@@ -20,7 +20,7 @@
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.1244350674" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.1247905990" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/arduino/core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/libraries/AdafruitMotorShield}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Libraries/AdafruitMotorShield}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/arduino/variant}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.951700575" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
