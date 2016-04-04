@@ -248,6 +248,31 @@ void logStableBuffer() {
 
 		Serial.print("   =>   tU-tD=");
 		unsigned long deltaTBeacon = buf.tU[i] - buf.tD[i];
-		Serial.println(deltaTBeacon);
+		Serial.print(deltaTBeacon);
+
+		unsigned long t1 = buf.tD[i]-buf.tA;
+		unsigned long t2 = buf.tU[i]-buf.tA;
+		unsigned long t2_t1 = t2-t1;
+		unsigned long tB_tA = buf.tB-buf.tA;
+
+		float alpha = 180.0f *((float) t2+t1) / ((float) tB_tA);
+		Serial.print("   alpha (without calibration)=");
+		Serial.print(alpha);
+
+		float beta = 180.0f * ((float) t2_t1) / ((float) tB_tA);
+
+		// add calibration
+		const float alphaRef = -193.0f;
+		float alphaB = alpha + alphaRef;
+
+		// TODO angle mort
+
+		Serial.print(" alphaB=");
+		Serial.print(alphaB);
+
+		Serial.print(" beta=");
+		Serial.print(beta);
+
+		Serial.println();
 	}
 }
