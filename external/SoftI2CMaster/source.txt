@@ -1,0 +1,4 @@
+https://github.com/felias-fogg/SoftI2CMaster
+
+ref: 
+http://playground.arduino.cc/Main/SoftwareI2CLibrary

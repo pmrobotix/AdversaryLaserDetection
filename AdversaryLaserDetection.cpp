@@ -1,10 +1,52 @@
-// Do not remove the include below
+
 #include "AdversaryLaserDetection.h"
+#include "MeanVariance.h"
 
 #include <AFMotor.h>
 #include <Wire.h>
 
+// I2C Soft, see http://playground.arduino.cc/Main/SoftwareI2CLibrary
+
+// *** ARDUINO MEGA ***
+#define SCL_PIN 5 // pin 5 of port B = digital pin 11 of Arduino Mega 2560
+#define SCL_PORT PORTB
+#define SDA_PIN 7 // pin 7 of port B = digital pin 13 of Arduino Mega 2560
+#define SDA_PORT PORTB
+#define I2C_TIMEOUT	1000 // ms
+#include <SoftI2CMaster.h>
+
+// *** ARDUINO DEUMILANOVE ***
+/*
+//#define SCL_PIN 3 // pin 3 of port B = digital pin 11 of duemilanove
+#define SCL_PIN 1 // pin 1 of port B = digital pin 9 of duemilanove
+#define SCL_PORT PORTB
+//#define SDA_PIN 5 // pin 5 of port B = digital pin 13 of duemilanove
+//#define SDA_PIN 2 // pin 2 of port B = digital pin 10 of duemilanove
+
+// * avec lib AFMotor
+// (scl/sda) 9/10, 9/11 :OK
+// (scl/sda) 9/12 :HS
+// 11 : OK
+// 12,13 : HS
+
+// * sans lib AFMotor
+// (scl/sda) 9/12 :OK
+// (scl/sda) 9/13 :HS
+
+// * sans lib AFMotor, slow mode
+// (scl/sda) 9/12 :OK
+// (scl/sda) 9/13 :HS
+
+#define SDA_PIN 5 //13
+#define SDA_PORT PORTB
+#define I2C_TIMEOUT	1000 // ms
+//#define I2C_SLOWMODE 1
+#include <SoftI2CMaster.h>
+*/
+
+
 AF_DCMotor motor(4);
+
 
 /** Acquisition mode (internal) */
 enum ACQ_MODE {
@@ -116,24 +158,42 @@ volatile LaserDetectionBuffer lastStableBuffer;
 volatile boolean stableBufReadInProgress = false;
 volatile ACQ_MODE acqMode = ACQ_MODE_STD; // init, do not change
 
+
+// calibration
+float betaHist[10];
+float beatMoy10;
+float betaHistIndex;
+
 void setup() {
+	Serial.begin(9600);           // set up Serial library at 9600 bps
+	Serial.println(F("AdversaryLaserDetection console!"));
+
+	//Soft i2c
+	if(!i2c_init()) {
+		Serial.println(F("WARN: I2C Soft bus is locked."));
+	}
 
 	// standard I2C
 	Wire.begin(); // join i2c bus (address optional for master)
 
-	Serial.begin(9600);           // set up Serial library at 9600 bps
-	Serial.println("AdversaryLaserDetection console!");
 
 	// pins mode
 	pinMode(ROTATION_PIN, INPUT_PULLUP);	// rotation 'tick' (0 = detection)
 	pinMode(LASER_PIN, INPUT_PULLUP);		// laser (0 = detection)
-	pinMode(13, OUTPUT); 					// led
+	//pinMode(13, OUTPUT); 					// led => soft i2c
 
 	// turn on motor
 	motor.setSpeed(200);
 	motor.run(RELEASE);
 
 	motor.run(FORWARD);
+	// start motor (will not always start if start speed < 120)
+	// don't even turn properly if < 75 rpm
+	motor.setSpeed(120);
+	// stay at 120 rpm
+
+	delay(1000);
+	// 75 rpm allows to detect up to 2.5 meters
 	motor.setSpeed(120);
 
 	// interrupts
@@ -143,7 +203,7 @@ void setup() {
 
 void loop() {
 	logStableBuffer();
-	delay(1000);
+	//delay(100);
 }
 
 void interruptRotationTick() {
@@ -214,9 +274,44 @@ void readFromStableBuffer(LaserDetectionBuffer &dest) {
 
 
 void sendToI2CSlave(int beaconCount) {
-	  Wire.beginTransmission(8); // transmit to device #8
+	  Wire.beginTransmission(0); // transmit to device x (0 for broadcast)
 	  Wire.write(beaconCount);              // sends one byte
 	  Wire.endTransmission();    // stop transmitting
+}
+
+// return false in case of error
+boolean sendToI2CSoftSlave(int beaconCount) {
+	uint8_t salveAddr = 0;
+	if (!i2c_start(salveAddr | I2C_WRITE)) {
+		return false;
+	}
+	//i2c_start_wait(salveAddr*2 | I2C_WRITE); //convert addr to 8bit
+	if (!i2c_write((uint8_t) beaconCount)) {
+		return false;
+	}
+	i2c_stop();
+	return true;
+}
+
+
+MeanVariance calibrationMeanVariance;
+void calibration(float newBeta) {
+	calibrationMeanVariance.addValue(newBeta);
+	Serial.print(F("** (calibration) Beta: "));
+
+	Serial.print(F(" last="));
+	Serial.print(newBeta, 4);
+
+	Serial.print(F(" histCount="));
+	Serial.print(calibrationMeanVariance.getHistCount());
+
+	Serial.print(F(" mean="));
+	Serial.print(calibrationMeanVariance.getMean(), 4);
+
+	Serial.print(F(" variance="));
+	Serial.print(calibrationMeanVariance.getVariance(), 6);
+
+	Serial.println();
 }
 
 
@@ -224,25 +319,25 @@ void logStableBuffer() {
 	LaserDetectionBuffer buf;
 	readFromStableBuffer(buf);
 
-	Serial.println("\n*****************");
-	Serial.print("DEBUG_INFO counts => BEACON_OVERFLOW:");
+	Serial.println(F("\n*****************"));
+	Serial.print(F("DEBUG_INFO counts => BEACON_OVERFLOW:"));
 	Serial.print(buf.dedugInfoCountByType[DEBUG_INFO_BEACON_OVERFLOW]);
 
-	Serial.print("  DEBUG_INFO_LAST_ONE_SEQUENCE:");
+	Serial.print(F("  DEBUG_INFO_LAST_ONE_SEQUENCE:"));
 	Serial.print(buf.dedugInfoCountByType[DEBUG_INFO_LAST_ONE_SEQUENCE]);
 
-	Serial.print("  UNEXPECTED_DETECTION_IN_LAST_ONE_SEQUENCE:");
+	Serial.print(F("  UNEXPECTED_DETECTION_IN_LAST_ONE_SEQUENCE:"));
 	Serial.println(buf.dedugInfoCountByType[DEBUG_INFO_UNEXPECTED_DETECTION_IN_LAST_ONE_SEQUENCE]);
 
 
-	Serial.print("tA=");
+	Serial.print(F("tA="));
 	Serial.print(buf.tA);
-	Serial.print("   tB=");
+	Serial.print(F("   tB="));
 	Serial.print(buf.tB);
-	Serial.print("   =>   tB-tA=");
+	Serial.print(F("   =>   tB-tA="));
 	Serial.println(buf.tB - buf.tA);
 
-	Serial.print("detectedBeaconCount=");
+	Serial.print(F("detectedBeaconCount="));
 	Serial.println(buf.detectedBeaconCount);
 
 	for(int i=0; i<buf.detectedBeaconCount; i++) {
@@ -284,12 +379,18 @@ void logStableBuffer() {
 		Serial.print(alphaB);
 
 		Serial.print(" beta=");
-		Serial.print(beta);
+		Serial.print(beta, 4); // 4 digits
 
 		Serial.println();
 
 
-		//I2C test
-		sendToI2CSlave(buf.detectedBeaconCount);
+		calibration(beta);
 	}
+
+	//standard I2C
+	sendToI2CSlave(buf.detectedBeaconCount);
+
+	// soft 2ic (led)
+	sendToI2CSoftSlave(buf.detectedBeaconCount);
+
 }
