@@ -190,10 +190,10 @@ void setup() {
 	// start motor (will not always start if start speed < 120)
 	// don't even turn properly if < 75 rpm
 	motor.setSpeed(120);
-	// stay at 120 rpm
 
 	delay(1000);
 	// 75 rpm allows to detect up to 2.5 meters
+	// but at height, a beacon is seen only id 38cm < dist < 140cm
 	motor.setSpeed(120);
 
 	// interrupts
@@ -203,7 +203,7 @@ void setup() {
 
 void loop() {
 	logStableBuffer();
-	//delay(100);
+	delay(1000);
 }
 
 void interruptRotationTick() {
@@ -314,6 +314,33 @@ void calibration(float newBeta) {
 	Serial.println();
 }
 
+/** Dist = from the center of the detector to the center of the beacon  (in meters) */
+float getDist(unsigned long t1, unsigned long t2, unsigned long tA, unsigned long tB) {
+	unsigned long start = micros();
+
+	//from calibration & external data processing
+	const float a=-0.018011;
+	const float b=0.075850;
+
+	unsigned long t2_t1 = t2-t1;
+	unsigned long tB_tA = tB-tA;
+
+	float betaRad = (((float) t2_t1) / ((float) tB_tA)) * PI;
+
+	// Dist = r - x + b ./ (2.*tan(betaRad)-a)
+	// x goes from 0.005 to 0.02 m => set to 0.01m / r = 0.04m
+
+	float dist = 0.03f + b / (2*tan(betaRad)-a);
+
+	unsigned long end = micros();
+
+	Serial.print(F("dist computation took "));
+	Serial.print(end-start);
+	Serial.println(F(" MICRO seconds."));
+	// => less than 0.2 ms on ariduno mega
+
+	return dist;
+}
 
 void logStableBuffer() {
 	LaserDetectionBuffer buf;
@@ -384,7 +411,11 @@ void logStableBuffer() {
 		Serial.println();
 
 
-		calibration(beta);
+		//calibration(beta);
+
+		float dist = getDist(t1, t2, buf.tA, buf.tB);
+		Serial.print(" dist=");
+		Serial.print(dist, 4);
 	}
 
 	//standard I2C
