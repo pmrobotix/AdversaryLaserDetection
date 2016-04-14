@@ -1,4 +1,7 @@
 
+#ifndef _MeanVariance_H_
+#define _MeanVariance_H_
+
 class MeanVariance {
 
 private:
@@ -14,3 +17,5 @@ public:
 	int getHistCount();
 	void addValue(float newValue);
 };
+
+#endif

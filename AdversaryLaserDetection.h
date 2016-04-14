@@ -6,9 +6,14 @@
 
 #ifndef _AdversaryLaserDetection_H_
 #define _AdversaryLaserDetection_H_
-#include "Arduino.h"
-//add your includes for the project AdversaryLaserDetection here
+#include <Arduino.h>
+#include "MeanVariance.h"
+#include "LedPannelsManager.h"
+#include "RawDetectionData.h"
+#include "DetectionDataProcessor.h"
 
+#include <AFMotor.h>
+#include <Wire.h>
 
 //end of add your includes here
 
@@ -18,8 +23,9 @@
 void interruptRotationTick();
 void interruptLaser();
 
+void readFromStableBuffer(RawDetectionData &dest);
 void writeToStableBuffer();
-void logStableBuffer();
+void logRawDetectionData(RawDetectionData buf);
 
 //Do not add code below this line
 #endif /* _AdversaryLaserDetection_H_ */
