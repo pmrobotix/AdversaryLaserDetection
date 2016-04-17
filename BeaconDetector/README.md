@@ -1,0 +1,3 @@
+# BeaconDetector
+
+Main module.

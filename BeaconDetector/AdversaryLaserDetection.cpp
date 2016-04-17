@@ -1,6 +1,8 @@
 
 #include "AdversaryLaserDetection.h"
 
+const byte MY_I2C_ADDRESS = 99;
+
 const bool DEBUG = false;
 const unsigned long TIME_BETWEEN_SEND_TO_LED_PANELS_MS = 100; //ms
 
@@ -38,19 +40,12 @@ void setup() {
 	Serial.begin(9600);           // set up Serial library at 9600 bps
 	Serial.println(F("AdversaryLaserDetection console!"));
 
-	// standard I2C
-	Wire.begin(); // join i2c bus (address optional for master)
+	Wire.begin(MY_I2C_ADDRESS);
+	Wire.onRequest(onBeaconDetectionDataRequested);
 
 	// pins mode
 	pinMode(ROTATION_PIN, INPUT_PULLUP);	// rotation 'tick' (0 = detection)
 	pinMode(LASER_PIN, INPUT_PULLUP);		// laser (0 = detection)
-	//pinMode(13, OUTPUT); 					// led => soft i2c
-
-	/*
-	// turn on motor
-	motor.setSpeed(200);
-	motor.run(RELEASE);
-	 */
 
 	motor.run(FORWARD);
 	// start motor (will not always start if start speed < 120)
@@ -58,8 +53,8 @@ void setup() {
 	motor.setSpeed(120);
 
 	delay(1000);
-	// 75 rpm allows to detect up to 2.5 meters
-	// but at height, a beacon is seen only id 38cm < dist < 140cm
+	// speed(75) allows to detect up to 2.5 meters
+	// but at standard height, a beacon is seen only if 38cm < dist < 140cm
 	motor.setSpeed(120);
 
 	// interrupts
@@ -165,6 +160,14 @@ void sendToI2CSlave(int beaconCount) {
 	  Wire.endTransmission();    // stop transmitting
 }
 */
+
+// respond to master request
+void onBeaconDetectionDataRequested() {
+	BeaconDetectionModel bdm = beaconDetectionStableHolder.getStable();
+	bdm.serialize();
+	Wire.write(bdm.serializedBuffer, sizeof(bdm.serializedBuffer));
+}
+
 
 MeanVariance calibrationMeanVariance;
 void calibration(float newBeta) {

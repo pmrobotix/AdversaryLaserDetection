@@ -27,6 +27,7 @@ void interruptLaser();
 void readFromStableBuffer(RawDetectionData &dest);
 void writeToStableBuffer();
 void logRawDetectionData(RawDetectionData buf);
+void onBeaconDetectionDataRequested();
 
 //Do not add code below this line
 #endif /* _AdversaryLaserDetection_H_ */

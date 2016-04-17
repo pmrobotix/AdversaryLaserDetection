@@ -19,23 +19,26 @@
 							<builder buildPath="${workspace_loc:/AdversaryLaserDetection}/Release" id="it.baeyens.arduino.sketch.builder.1070935041" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.1244350674" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.1247905990" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/arduino/core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/Libraries/Wire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/Libraries/Wire/utility}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/AdafruitMotorShield}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/SoftI2CMaster}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/arduino/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/arduino/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/Libraries/Wire}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/Libraries/Wire/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/BeaconDetectorCommon}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/AdafruitMotorShield}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/SoftI2CMaster}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.951700575" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
 							<tool id="it.baeyens.arduino.tool.compiler.c.1251175776" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
 								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.1856211641" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/arduino/core}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/arduino/variant}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/Libraries/Wire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/Libraries/Wire/utility}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/AdafruitMotorShield}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/AdversaryLaserDetection/SoftI2CMaster}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/arduino/core}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/arduino/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/Libraries/Wire}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/Libraries/Wire/utility}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/BeaconDetectorCommon}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/BeaconDetectorExtLibs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/AdafruitMotorShield}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/SoftI2CMaster}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.1172479267" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
@@ -48,7 +51,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="external/SoftI2CMaster/examples|external/AdafruitMotorShield/examples|SoftI2CMaster|AdafruitMotorShield|Libraries/*/?xamples|Libraries/*/?xtras" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+						<entry excluding="SoftI2CMaster/examples|AdafruitMotorShield/examples|Libraries/*/?xamples|Libraries/*/?xtras" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
