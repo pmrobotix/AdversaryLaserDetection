@@ -28,14 +28,8 @@ bool BeaconVisualusation::drawBeacon(int angle, int distInCm, bool firstBeaconFo
 
 	unsigned int heigth = getHeight(distInCm); // 0->7
 
-	Serial.print(F("distInCm="));
-	Serial.print(distInCm);
-	Serial.print(F("  heigth="));
-	Serial.println(heigth);
-
 	if(firstBeaconForThisPanel) clearPannel();
-	//Rb.drawLine(7-heigth, columnOfPanel, 7, columnOfPanel, random(0xFFFFFF));
-	Rb.drawLine(7-heigth, columnOfPanel, 7, columnOfPanel, GREEN);
+	Rb.drawLine(7-heigth, columnOfPanel, 7, columnOfPanel, random(0xFFFFFF));
 
 	return true;
 }
@@ -59,9 +53,6 @@ int BeaconVisualusation::getColumn(int angle360) {
 	float angleInPanel = angle360 + 45 - panel * 90;
 	float colIndex = angleInPanel/11.25; // ready to truncate (0 to 7)
 	int colIndexRounded = (int) colIndex;
-
-	//Serial.print(F("colIndexRounded="));
-	//Serial.println(colIndexRounded);
 
 	return colIndexRounded;
 }

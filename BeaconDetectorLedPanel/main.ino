@@ -7,19 +7,13 @@
 const byte PANEL_NUMBER = 3;
 const byte MY_I2C_ADDRESS = PANEL_NUMBER;
 
-//unsigned int loopsWithoutBeaconForThisPanel = 0;
+const bool DEBUG = false;
+
 bool showEye = true;
 int eyeLoops = 0;
 
 BeaconDetectionModel beaconDetectionModel;
 BeaconVisualusation beaconVisualusation(PANEL_NUMBER); // panel number
-
-/*
-void drawWait() {
-	Rb.blankDisplay();
-	Rb.drawChar('W', 0, 1, random(0xFFFFFF)); // W for waiting
-}
-*/
 
 void setup() {
 	//Rb.init(); -> in BeaconVisualusation
@@ -31,15 +25,19 @@ void setup() {
 	Wire.onReceive(receiveEvent); // register event
 	Serial.begin(9600);           // start serial for output
 
-	//drawWait();
+	Serial.print(F("BeaconDetectorLedPannel Console! - "));
+	Serial.print(F("PANEL_NUMBER="));
+	Serial.print(PANEL_NUMBER);
+	Serial.print(F(" MY_I2C_ADDRESS="));
+	Serial.print(MY_I2C_ADDRESS);
+	Serial.println();
+
 	initEye();
 }
 
 void loop() {
-	Serial.println("loop");
-
 	// log last beacon received (console unavailable in interruption)
-	beaconDetectionModel.logToConsole();
+	if(DEBUG) beaconDetectionModel.logToConsole();
 
 	if(showEye) {
 		if(eyeLoops>10) {
@@ -49,8 +47,6 @@ void loop() {
 		eyeLoop();
 		eyeLoops++;
 	}
-	//if(loopsWithoutBeaconForThisPanel > 0) eyeLoop();
-	//loopsWithoutBeaconForThisPanel++;
 
 	delay(100);
 }
