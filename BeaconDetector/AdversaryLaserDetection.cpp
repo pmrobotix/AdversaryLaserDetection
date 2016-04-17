@@ -91,7 +91,9 @@ void interruptRotationTick() {
 	int laser = digitalRead(LASER_PIN);
 	unsigned long t = micros();
 
-	workBuffer.tB = t; // FIXME NOK en mode ACQ_MODE_LAST_ONE
+	if(acqMode != ACQ_MODE_DISABLED) {
+		workBuffer.tB = t;
+	}
 
 	if(laser==0 && acqMode==ACQ_MODE_STD) {
 		// a beacon is currently detected, overlap on next rotation
