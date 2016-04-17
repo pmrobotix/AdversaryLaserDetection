@@ -1,13 +1,13 @@
-#ifndef _LedPannelsManager_H_
-#define _LedPannelsManager_H_
+#ifndef _LedPanelsManager_H_
+#define _LedPanelsManager_H_
 
 #include "BeaconDetectionModel.h"
 #include <Arduino.h>
 
 
-class LedPannelsManager {
+class LedPanelsManager {
 public:
-	LedPannelsManager();
+	LedPanelsManager();
 	void sendDetectedBeacons(BeaconDetectionModel beaconDetectionModel);
 
 private:
@@ -15,4 +15,4 @@ private:
 };
 
 
-#endif //_LedPannelsManager_H_
+#endif //_LedPanelsManager_H_

@@ -2,7 +2,7 @@
 #include "AdversaryLaserDetection.h"
 
 
-LedPannelsManager ledPannelsManager;
+LedPanelsManager ledPannelsManager;
 DetectionDataProcessor detectionDataProcessor;
 
 AF_DCMotor motor(4);
@@ -43,9 +43,11 @@ void setup() {
 	pinMode(LASER_PIN, INPUT_PULLUP);		// laser (0 = detection)
 	//pinMode(13, OUTPUT); 					// led => soft i2c
 
+	/*
 	// turn on motor
 	motor.setSpeed(200);
 	motor.run(RELEASE);
+	 */
 
 	motor.run(FORWARD);
 	// start motor (will not always start if start speed < 120)

@@ -1,5 +1,5 @@
 
-#include "LedPannelsManager.h"
+#include "LedPanelsManager.h"
 
 // I2C Soft, see http://playground.arduino.cc/Main/SoftwareI2CLibrary
 // put this in .ccp and not in .h
@@ -11,20 +11,13 @@
 #include <SoftI2CMaster.h>
 
 
-LedPannelsManager::LedPannelsManager() {
+LedPanelsManager::LedPanelsManager() {
 	if(!i2c_init()) {
 		if(Serial) Serial.println(F("WARN: I2C Soft bus is locked."));
 	}
 }
 
-void LedPannelsManager::sendDetectedBeacons(BeaconDetectionModel bdm) {
-	//debug
-	if(Serial) {
-		Serial.print(F("sizeof(bdm.angleInDeg)="));
-		Serial.print(sizeof(bdm.angleInDeg));
-		Serial.println(F(" (should be 10)"));
-	}
-
+void LedPanelsManager::sendDetectedBeacons(BeaconDetectionModel bdm) {
 	bdm.serialize();
 
 	uint8_t salveAddr = 0; // broadcast
@@ -36,7 +29,7 @@ void LedPannelsManager::sendDetectedBeacons(BeaconDetectionModel bdm) {
 
 //private methods
 
-void LedPannelsManager::write(const uint8_t *data, size_t quantity) {
+void LedPanelsManager::write(const uint8_t *data, size_t quantity) {
 	for(size_t i = 0; i < quantity; ++i){
     	i2c_write(data[i]);
     }

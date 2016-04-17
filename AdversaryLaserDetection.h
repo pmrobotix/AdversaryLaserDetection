@@ -8,7 +8,7 @@
 #define _AdversaryLaserDetection_H_
 #include <Arduino.h>
 #include "MeanVariance.h"
-#include "LedPannelsManager.h"
+#include "LedPanelsManager.h"
 #include "RawDetectionData.h"
 #include "DetectionDataProcessor.h"
 

@@ -13,6 +13,8 @@ public:
 	// ** data to be serialized
 	uint8_t detectedBeaconCount;
 	uint8_t distToBeaconCenterInCm[MAX_NBR_OF_BEACONS];
+
+	/** -180 to 180 (clockwise) (0 is the front of the robot) */
 	int16_t angleInDeg[MAX_NBR_OF_BEACONS];
 	uint8_t flags[MAX_NBR_OF_BEACONS]; // future use
 
