@@ -36,7 +36,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/Libraries/Wire}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/Libraries/Wire/utility}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/BeaconDetectorCommon}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/BeaconDetectorExtLibs}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/AdafruitMotorShield}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/BeaconDetector/SoftI2CMaster}&quot;"/>
 								</option>

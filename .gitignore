@@ -1,4 +1,2 @@
 Release/
-.project
-.settings/
-spec.d
+.ino.cpp
