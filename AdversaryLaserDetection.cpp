@@ -1,9 +1,12 @@
 
 #include "AdversaryLaserDetection.h"
 
+const bool DEBUG = false;
+const unsigned long TIME_BETWEEN_SEND_TO_LED_PANELS_MS = 100; //ms
 
-LedPanelsManager ledPannelsManager;
+LedPanelsManager ledPanelsManager(TIME_BETWEEN_SEND_TO_LED_PANELS_MS);
 DetectionDataProcessor detectionDataProcessor;
+BeaconDetectionStableHolder beaconDetectionStableHolder;
 
 AF_DCMotor motor(4);
 
@@ -64,29 +67,36 @@ void setup() {
 	attachInterrupt(digitalPinToInterrupt(LASER_PIN), interruptLaser, CHANGE);
 }
 
+void sendToLedPanels() {
+	ledPanelsManager.sendDetectedBeaconsIfRequired(
+			beaconDetectionStableHolder.getStable());
+}
+
 void processDetectionData() {
 	RawDetectionData rawDetectionData;
 	readFromStableBuffer(rawDetectionData);
-	logRawDetectionData(rawDetectionData);
+	if(DEBUG) logRawDetectionData(rawDetectionData);
 
-	BeaconDetectionModel beaconDetectionModel;
-	detectionDataProcessor.processRawData(rawDetectionData, beaconDetectionModel);
-	beaconDetectionModel.logToConsole();
 
-	ledPannelsManager.sendDetectedBeacons(beaconDetectionModel);
+	detectionDataProcessor.processRawData(rawDetectionData, beaconDetectionStableHolder.startWrite());
+	beaconDetectionStableHolder.commit();
+	if(DEBUG) beaconDetectionStableHolder.getStable().logToConsole();
+
 }
 
 
 void loop() {
 	processDetectionData();
-	delay(1000);
+	sendToLedPanels(); // send only if its time
+
+	//no wait, always process detectionData
 }
 
 void interruptRotationTick() {
 	int laser = digitalRead(LASER_PIN);
 	unsigned long t = micros();
 
-	workBuffer.tB = t;
+	workBuffer.tB = t; // FIXME NOK en mode ACQ_MODE_LAST_ONE
 
 	if(laser==0 && acqMode==ACQ_MODE_STD) {
 		// a beacon is currently detected, overlap on next rotation
@@ -148,13 +158,13 @@ void readFromStableBuffer(RawDetectionData &dest) {
 	stableBufReadInProgress = false;
 }
 
-
+/*
 void sendToI2CSlave(int beaconCount) {
 	  Wire.beginTransmission(0); // transmit to device x (0 for broadcast)
 	  Wire.write(beaconCount);              // sends one byte
 	  Wire.endTransmission();    // stop transmitting
 }
-
+*/
 
 MeanVariance calibrationMeanVariance;
 void calibration(float newBeta) {

@@ -11,13 +11,18 @@
 #include <SoftI2CMaster.h>
 
 
-LedPanelsManager::LedPanelsManager() {
+LedPanelsManager::LedPanelsManager(unsigned long timeBetweenSendToLedPanelsMs) {
+	this->timeBetweenSendToLedPanelsMs = timeBetweenSendToLedPanelsMs;
+	this->lastSentToLedPanelsMs = 0;
+
 	if(!i2c_init()) {
-		if(Serial) Serial.println(F("WARN: I2C Soft bus is locked."));
+		Serial.println(F("WARN: I2C Soft bus is locked."));
 	}
 }
 
-void LedPanelsManager::sendDetectedBeacons(BeaconDetectionModel bdm) {
+void LedPanelsManager::sendDetectedBeaconsIfRequired(BeaconDetectionModel bdm) {
+	if( ! isTimeToSend() ) return;
+
 	bdm.serialize();
 
 	uint8_t salveAddr = 0; // broadcast
@@ -33,4 +38,14 @@ void LedPanelsManager::write(const uint8_t *data, size_t quantity) {
 	for(size_t i = 0; i < quantity; ++i){
     	i2c_write(data[i]);
     }
+}
+
+bool LedPanelsManager::isTimeToSend() {
+	unsigned long now = millis();
+	if(now > lastSentToLedPanelsMs + timeBetweenSendToLedPanelsMs) {
+		lastSentToLedPanelsMs = now;
+		return true;
+	} else {
+		return false;
+	}
 }

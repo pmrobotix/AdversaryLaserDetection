@@ -44,9 +44,9 @@ float DetectionDataProcessor::getDistInM(unsigned long t1, unsigned long t2, uns
 	unsigned long end = micros();
 
 	/*
-	Serial.print(F("dist computation took "));
-	Serial.print(end-start);
-	Serial.println(F(" MICRO seconds."));
+	if(DEBUG) Serial.print(F("dist computation took "));
+	if(DEBUG) Serial.print(end-start);
+	if(DEBUG) Serial.println(F(" MICRO seconds."));
 	// => less than 0.2 ms on ariduno mega
 	 */
 

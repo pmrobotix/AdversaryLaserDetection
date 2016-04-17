@@ -11,6 +11,7 @@
 #include "LedPanelsManager.h"
 #include "RawDetectionData.h"
 #include "DetectionDataProcessor.h"
+#include "BeaconDetectionStableHolder.h"
 
 #include <AFMotor.h>
 #include <Wire.h>

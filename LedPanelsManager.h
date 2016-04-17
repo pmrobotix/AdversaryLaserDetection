@@ -7,11 +7,15 @@
 
 class LedPanelsManager {
 public:
-	LedPanelsManager();
-	void sendDetectedBeacons(BeaconDetectionModel beaconDetectionModel);
+	LedPanelsManager(unsigned long timeBetweenSendToLedPanelsMs);
+	void sendDetectedBeaconsIfRequired(BeaconDetectionModel beaconDetectionModel);
 
 private:
 	void write(const uint8_t *data, size_t quantity);
+	bool isTimeToSend();
+
+	unsigned long timeBetweenSendToLedPanelsMs;
+	unsigned long lastSentToLedPanelsMs;
 };
 
 
