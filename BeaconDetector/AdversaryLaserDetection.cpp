@@ -38,7 +38,9 @@ volatile ACQ_MODE acqMode = ACQ_MODE_STD; // init, do not change
 
 void setup() {
 	Serial.begin(9600);           // set up Serial library at 9600 bps
-	Serial.println(F("AdversaryLaserDetection console!"));
+	Serial.print(F("AdversaryLaserDetection console! - MY_I2C_ADDRESS="));
+	Serial.print(MY_I2C_ADDRESS);
+	Serial.println();
 
 	Wire.begin(MY_I2C_ADDRESS);
 	Wire.onRequest(onBeaconDetectionDataRequested);
@@ -253,8 +255,18 @@ void logRawDetectionData(RawDetectionData buf) {
 		Serial.print(" beta=");
 		Serial.print(beta, 4); // 4 digits
 
-		Serial.println();
 
+		// for blind spot calibration:
+		float alpha_t1 = 360.0 *((float) t1) / ((float) tB_tA);
+		Serial.print(" / alpha_t1=");
+		Serial.print(alpha_t1);
+
+		float alpha_t2 = 360.0 *((float) t2) / ((float) tB_tA);
+		Serial.print(" alpha_t2=");
+		Serial.print(alpha_t2);
+
+
+		Serial.println();
 
 		//calibration(beta);
 	}

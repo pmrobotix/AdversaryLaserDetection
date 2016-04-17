@@ -10,13 +10,15 @@ class BeaconDetectionModel {
 public:
 	static const size_t MAX_NBR_OF_BEACONS = 5;
 
+	static const uint8_t FLAG_BLIND_SPOT = 1;
+
 	// ** data to be serialized
 	uint8_t detectedBeaconCount;
 	uint8_t distToBeaconCenterInCm[MAX_NBR_OF_BEACONS];
 
 	/** -180 to 180 (clockwise) (0 is the front of the robot) */
 	int16_t angleInDeg[MAX_NBR_OF_BEACONS];
-	uint8_t flags[MAX_NBR_OF_BEACONS]; // future use
+	uint8_t flags[MAX_NBR_OF_BEACONS]; // FLAG_BLIND_SPOT, ...
 
 	uint8_t serializedBuffer[ sizeof(detectedBeaconCount)
 						  + sizeof(distToBeaconCenterInCm)

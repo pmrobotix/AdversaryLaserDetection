@@ -16,6 +16,17 @@ private:
 	float getDistInM(unsigned long t1, unsigned long t2, unsigned long tB_tA);
 
 	float getAngleInDeg(unsigned long t1, unsigned long t2, unsigned long tB_tA);
+
+	bool isInBlindSpot(unsigned long t1, unsigned long t2, unsigned long tB_tA);
+	bool isInBlindSpot(float a);
+
+
+	unsigned long tD[MAX_NBR_OF_BEACONS];
+
+	/** time in microseconds of laser signal rise (end of beacon detection) */
+	unsigned long tU[MAX_NBR_OF_BEACONS];
+
+	int detectedBeaconCount;
 };
 
 

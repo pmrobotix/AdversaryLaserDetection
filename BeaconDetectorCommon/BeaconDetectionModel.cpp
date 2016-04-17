@@ -36,8 +36,11 @@ void BeaconDetectionModel::logToConsole() {
 		Serial.print(": angleInDeg=");
 		Serial.print(angleInDeg[i]);
 
-		Serial.print(": distToBeaconCenterInCm=");
+		Serial.print(" distToBeaconCenterInCm=");
 		Serial.print(distToBeaconCenterInCm[i]);
+
+		Serial.print(" blindSpot=");
+		Serial.print((flags[i] & FLAG_BLIND_SPOT)==FLAG_BLIND_SPOT);
 
 		Serial.println();
 	}

@@ -4,7 +4,7 @@
 #include "BeaconDetectionModel.h"
 #include "BeaconVisualusation.h"
 
-const byte PANEL_NUMBER = 3;
+const byte PANEL_NUMBER = 1;
 const byte MY_I2C_ADDRESS = PANEL_NUMBER;
 
 const bool DEBUG = false;
@@ -74,6 +74,7 @@ void onBeaconDetectionModelReceived() {
 		if(beaconVisualusation.drawBeacon(
 				beaconDetectionModel.angleInDeg[i],
 				beaconDetectionModel.distToBeaconCenterInCm[i],
+				beaconDetectionModel.flags[i],
 				firstBeaconForThisPanel)) {
 
 			forThisPanel = true;

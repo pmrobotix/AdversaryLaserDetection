@@ -13,7 +13,7 @@ public:
 	void clearPannel();
 
 	/** return true if the beacon was for this panel */
-	bool drawBeacon(int angle, int distInCm, bool firstBeaconForThisPanel);
+	bool drawBeacon(int angle, int distInCm, uint8_t flags, bool firstBeaconForThisPanel);
 
 private:
 	int pannelNumber;
@@ -29,6 +29,8 @@ private:
 	 * >53cm => 1 / > 128cm => 7
 	 */
 	unsigned int getHeight(uint8_t distInCm);
+
+	uint32_t getColor(uint8_t flags);
 };
 
 

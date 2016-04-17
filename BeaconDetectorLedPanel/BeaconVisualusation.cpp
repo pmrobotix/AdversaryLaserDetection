@@ -4,6 +4,7 @@
 #include <Rainbowduino.h>
 
 const uint32_t GREEN = 0x00FF00;
+const uint32_t ORANGE = 0xFF8C00;
 
 BeaconVisualusation::BeaconVisualusation(int pannelNumber) {
 	this->pannelNumber = pannelNumber;
@@ -14,7 +15,9 @@ void BeaconVisualusation::clearPannel() {
 	Rb.blankDisplay();
 }
 
-bool BeaconVisualusation::drawBeacon(int angle, int distInCm, bool firstBeaconForThisPanel) {
+bool BeaconVisualusation::drawBeacon(int angle, int distInCm, uint8_t flags,
+		bool firstBeaconForThisPanel) {
+
 	// convert from -180/180 to 0/360
 	int angle360 = (angle + 360) % 360;
 
@@ -28,8 +31,11 @@ bool BeaconVisualusation::drawBeacon(int angle, int distInCm, bool firstBeaconFo
 
 	unsigned int heigth = getHeight(distInCm); // 0->7
 
+	uint32_t color = getColor(flags);
+
 	if(firstBeaconForThisPanel) clearPannel();
-	Rb.drawLine(7-heigth, columnOfPanel, 7, columnOfPanel, random(0xFFFFFF));
+	//Rb.drawLine(7-heigth, columnOfPanel, 7, columnOfPanel, random(0xFFFFFF));
+	Rb.drawLine(7-heigth, columnOfPanel, 7, columnOfPanel, color);
 
 	return true;
 }
@@ -70,4 +76,13 @@ unsigned int BeaconVisualusation::getHeight(uint8_t dist) {
 	int heightInt = height;
 	if(heightInt<0) heightInt = 0;
 	return heightInt;
+}
+
+uint32_t BeaconVisualusation::getColor(uint8_t flags) {
+	if((flags & BeaconDetectionModel::FLAG_BLIND_SPOT)
+			== BeaconDetectionModel::FLAG_BLIND_SPOT) {
+		return ORANGE;
+	} else {
+		return GREEN;
+	}
 }
