@@ -7,7 +7,7 @@
 class BeaconVisualusation {
 
 public:
-	/** panels: 0=right / 1=back / 2=left */
+	/** panels: 1=right / 2=back / 3=left */
 	BeaconVisualusation(int pannelNumber);
 
 	void clearPannel();
