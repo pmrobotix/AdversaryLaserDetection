@@ -17,6 +17,9 @@ void BeaconVisualusation::clearPannel() {
 
 bool BeaconVisualusation::drawBeacon(int angle, int distInCm, uint8_t flags,
 		bool firstBeaconForThisPanel) {
+			
+	// display the beacon on the opposite side of the LED panels
+	angle = angle + 180;
 
 	// convert from -180/180 to 0/360
 	int angle360 = (angle + 360) % 360;
