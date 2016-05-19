@@ -4,7 +4,12 @@
 #include "BeaconDetectionModel.h"
 #include "BeaconVisualusation.h"
 
+//__________________________
+// panels: 1=right / 2=back / 3=left
 const byte PANEL_NUMBER = 1;
+//__________________________
+
+
 const byte MY_I2C_ADDRESS = PANEL_NUMBER;
 
 const bool DEBUG = false;

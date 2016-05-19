@@ -1,2 +1,2 @@
 spec.o: \
- D:/PM-ROBOTIX/eclipseArduino/workspace/.metadata/.plugins/org.eclipse.cdt.managedbuilder.core/spec.C
+ /home/pmx/workspacePMX/.metadata/.plugins/org.eclipse.cdt.managedbuilder.core/spec.C

@@ -29,17 +29,17 @@
 		<link>
 			<name>AdafruitMotorShield</name>
 			<type>2</type>
-			<locationURI>BeaconDetectorAdafruitMotorShield/AdafruitMotorShield</locationURI>
+			<location>/home/pmx/git/AdversaryLaserDetection/BeaconDetectorExtLibs/AdafruitMotorShield</location>
 		</link>
 		<link>
 			<name>BeaconDetectorCommon</name>
 			<type>2</type>
-			<locationURI>BeaconDetectorBeaconDetectorCommon/BeaconDetectorCommon</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/BeaconDetectorCommon</locationURI>
 		</link>
 		<link>
 			<name>SoftI2CMaster</name>
 			<type>2</type>
-			<locationURI>BeaconDetectorSoftI2CMaster/SoftI2CMaster</locationURI>
+			<location>/home/pmx/git/AdversaryLaserDetection/BeaconDetectorExtLibs/SoftI2CMaster</location>
 		</link>
 		<link>
 			<name>Libraries/Wire</name>
@@ -60,15 +60,15 @@
 	<variableList>
 		<variable>
 			<name>ArduinoHardwareLibPath</name>
-			<value>file:/D:/PM-ROBOTIX/arduino-1.6.5-r5/hardware/arduino/avr/libraries</value>
+			<value>file:/install/arduino-1.6.5-r5/hardware/arduino/avr/libraries</value>
 		</variable>
 		<variable>
 			<name>ArduinoPinPath</name>
-			<value>file:/D:/PM-ROBOTIX/arduino-1.6.5-r5/hardware/arduino/avr/variants</value>
+			<value>file:/install/arduino-1.6.5-r5/hardware/arduino/avr/variants</value>
 		</variable>
 		<variable>
 			<name>ArduinoPlatformPath</name>
-			<value>file:/D:/PM-ROBOTIX/arduino-1.6.5-r5/hardware/arduino/avr/cores</value>
+			<value>file:/install/arduino-1.6.5-r5/hardware/arduino/avr/cores</value>
 		</variable>
 	</variableList>
 </projectDescription>
