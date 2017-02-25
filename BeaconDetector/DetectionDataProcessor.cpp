@@ -63,7 +63,8 @@ float DetectionDataProcessor::getAngleInDeg(unsigned long t1, unsigned long t2, 
 	float alpha = 180.0f *((float) t2+t1) / ((float) tB_tA);
 
 	// add calibration
-	const float alphaRef = -193.0f;
+	//const float alphaRef = -193.0f; // 2016
+	const float alphaRef = -157.0f; // 2017
 	float alphaB = alpha + alphaRef;
 
 	return alphaB;
@@ -78,5 +79,6 @@ bool DetectionDataProcessor::isInBlindSpot(unsigned long t1, unsigned long t2, u
 
 // a is angleWithoutCalibration
 bool DetectionDataProcessor::isInBlindSpot(float a) {
-	return a>8.0 && a<22.5;
+	//return a>8.0 && a<22.5;
+	return false; // no more blind spot
 }

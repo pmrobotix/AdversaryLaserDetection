@@ -3,15 +3,16 @@
 
 const byte MY_I2C_ADDRESS = 99;
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 const unsigned long TIME_BETWEEN_SEND_TO_LED_PANELS_MS = 100; //ms
+const unsigned long TIME_BETWEEN_SEND_TO_CONSOLE_MS = 1000; //ms
 
 LedPanelsManager ledPanelsManager(TIME_BETWEEN_SEND_TO_LED_PANELS_MS);
 DetectionDataProcessor detectionDataProcessor;
 BeaconDetectionStableHolder beaconDetectionStableHolder;
 
-AF_DCMotor motor(4);
-
+//AF_DCMotor motor(4);
+unsigned long lastSentToConsoleMs=0;
 
 /** Acquisition mode (internal) */
 enum ACQ_MODE {
@@ -24,8 +25,9 @@ enum ACQ_MODE {
 };
 
 
-const uint8_t ROTATION_PIN = 2;
-const uint8_t LASER_PIN = 3;
+const uint8_t ROTATION_SENSOR_PIN = 0;
+const uint8_t LASER_PIN = 1;
+const uint8_t MOTOR_PIN = 10;
 
 
 // Detection buffers
@@ -37,7 +39,7 @@ volatile ACQ_MODE acqMode = ACQ_MODE_STD; // init, do not change
 
 
 void setup() {
-	Serial.begin(9600);           // set up Serial library at 9600 bps
+	Serial.begin(9600);           // set up Serial library at xx bps
 	Serial.print(F("AdversaryLaserDetection console! - MY_I2C_ADDRESS="));
 	Serial.print(MY_I2C_ADDRESS);
 	Serial.println();
@@ -46,21 +48,18 @@ void setup() {
 	Wire.onRequest(onBeaconDetectionDataRequested);
 
 	// pins mode
-	pinMode(ROTATION_PIN, INPUT_PULLUP);	// rotation 'tick' (0 = detection)
+	pinMode(ROTATION_SENSOR_PIN, INPUT_PULLUP);	// rotation 'tick' (0 = detection)
 	pinMode(LASER_PIN, INPUT_PULLUP);		// laser (0 = detection)
 
-	motor.run(FORWARD);
+	//motor.run(FORWARD);
 	// start motor (will not always start if start speed < 120)
 	// don't even turn properly if < 75 rpm
-	motor.setSpeed(120);
-
-	delay(1000);
-	// speed(75) allows to detect up to 2.5 meters
-	// but at standard height, a beacon is seen only if 38cm < dist < 140cm
-	motor.setSpeed(120);
+	//motor.setSpeed(120);
+	pinMode(MOTOR_PIN, OUTPUT);
+	analogWrite(MOTOR_PIN, 50);
 
 	// interrupts
-	attachInterrupt(digitalPinToInterrupt(ROTATION_PIN), interruptRotationTick, FALLING);
+	attachInterrupt(digitalPinToInterrupt(ROTATION_SENSOR_PIN), interruptRotationTick, FALLING);
 	attachInterrupt(digitalPinToInterrupt(LASER_PIN), interruptLaser, CHANGE);
 }
 
@@ -70,14 +69,16 @@ void sendToLedPanels() {
 }
 
 void processDetectionData() {
+	bool isTimeToLog = isTimeToSendToConsole();
+
 	RawDetectionData rawDetectionData;
 	readFromStableBuffer(rawDetectionData);
-	if(DEBUG) logRawDetectionData(rawDetectionData);
+	if(DEBUG && isTimeToLog) logRawDetectionData(rawDetectionData);
 
 
 	detectionDataProcessor.processRawData(rawDetectionData, beaconDetectionStableHolder.startWrite());
 	beaconDetectionStableHolder.commit();
-	if(DEBUG) beaconDetectionStableHolder.getStable().logToConsole();
+	if(DEBUG && isTimeToLog) beaconDetectionStableHolder.getStable().logToConsole();
 
 }
 
@@ -272,3 +273,12 @@ void logRawDetectionData(RawDetectionData buf) {
 	}
 }
 
+bool isTimeToSendToConsole() {
+	unsigned long now = millis();
+	if(now > lastSentToConsoleMs + TIME_BETWEEN_SEND_TO_CONSOLE_MS) {
+		lastSentToConsoleMs = now;
+		return true;
+	} else {
+		return false;
+	}
+}

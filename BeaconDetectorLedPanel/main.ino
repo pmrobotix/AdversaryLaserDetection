@@ -4,10 +4,10 @@
 #include "BeaconDetectionModel.h"
 #include "BeaconVisualusation.h"
 
-const byte PANEL_NUMBER = 1;
+const byte PANEL_NUMBER = 2;
 const byte MY_I2C_ADDRESS = PANEL_NUMBER;
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 
 bool showEye = true;
 int eyeLoops = 0;
@@ -67,6 +67,8 @@ void receiveEvent(int howMany) {
 }
 
 void onBeaconDetectionModelReceived() {
+	if(DEBUG) Serial.println(F("onBeaconDetectionModelReceived..."));
+
 	bool forThisPanel = false;
 	bool firstBeaconForThisPanel = true;
 

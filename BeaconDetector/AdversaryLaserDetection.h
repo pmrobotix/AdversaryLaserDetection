@@ -13,7 +13,7 @@
 #include "DetectionDataProcessor.h"
 #include "BeaconDetectionStableHolder.h"
 
-#include <AFMotor.h>
+//#include <AFMotor.h>
 #include <Wire.h>
 
 //end of add your includes here
@@ -28,6 +28,8 @@ void readFromStableBuffer(RawDetectionData &dest);
 void writeToStableBuffer();
 void logRawDetectionData(RawDetectionData buf);
 void onBeaconDetectionDataRequested();
+
+bool isTimeToSendToConsole();
 
 //Do not add code below this line
 #endif /* _AdversaryLaserDetection_H_ */
